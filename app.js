@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+  res.setHeader('Access-Control-Allow-Origin', 'https://libararyangularapp.herokuapp.com');
 
   // Request methods you wish to allow
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -27,9 +27,9 @@ app.use(function (req, res, next) {
   next();
 });
 
-mongoose.connect("mongodb://localhost:27017/libraryAngularDB", { useNewUrlParser: true });
+//mongoose.connect("mongodb://localhost:27017/libraryAngularDB", { useNewUrlParser: true });
 
-//mongoose.connect("mongodb+srv://anand:unicornb1331@cluster0-0tquo.mongodb.net/libraryAngularDB?retryWrites=true&w=majority");
+mongoose.connect("mongodb+srv://anand:unicornb1331@cluster0-0tquo.mongodb.net/libraryAngularDB?retryWrites=true&w=majority");
 
 var bookCollection = mongoose.model("bookdetails", {
   isbn: String,
