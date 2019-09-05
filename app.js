@@ -114,26 +114,68 @@ app.get("/showAuthors", (req, res) => {
 ///Register///
 app.post("/register", (req, res) => {
   var user = new userCollection(req.body);
-  user.save((error, data) => {
-    if (error) {
-      console.log(error);
+  var findUser = user.email;
+
+  userCollection.findOne({ email:findUser},(error,data)=>{
+    if(!data) {
+      user.save((error, data) => {
+        if (error) {
+          console.log(error);
+          res.send(error);
+        } else {
+          console.log("User Registered Successfully");
+          res.json("User Registered Successfully");
+        }
+      })
     } else {
-      console.log("User Added");
-      res.send(data);
+      console.log('Email already exists');
+      res.json("Email already Exists!");
     }
-  })
-})
+  });
+  
+});
 
 ///Log In///
 app.post("/login", (req, res) => {
-  var email = req.body.email;
-  console.log(email);
+  var e = req.body.email;
+  var p = req.body.password;
 
-  userCollection.find({ email: email }, (error, data) => {
+  userCollection.find({$and:[{ email: e },{password: p}]}, (error, data) => {
     if (error) {
-      console.log(error);
+      res.send(error);
+    } else if ( data.length == 0) {
+      res.json("Invalid Credentials");
     } else {
       console.log(" User details corresponding to email address returned ");
+      res.send(data);
+    }
+  });
+});
+
+////Single View Book////
+app.post("/singleViewBook",(req,res)=>{
+  var id = Object.values(req.body);
+
+  bookCollection.find({_id:id},(error,data)=>{
+    if(error) {
+      res.send(error);
+    } else {
+      console.log("found book and returned data");
+      res.send(data);
+    }
+  });
+});
+
+//// Single View author///
+
+app.post("/singleViewAuthor",(req,res)=>{
+  var id = Object.values(req.body);
+
+  authorCollection.find({_id:id},(error,data)=>{
+    if(error) {
+      res.send(error);
+    } else {
+      console.log("Retturned Author Details");
       res.send(data);
     }
   });
